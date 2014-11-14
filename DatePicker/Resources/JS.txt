@@ -1,0 +1,169 @@
+﻿<script type="text/javascript">
+
+$(document).ready(function () {
+
+    /** Init **/
+
+    $(function () {
+        initDatePicker();
+        initDateDropDown();
+    });
+
+
+    /** Date Picker **/
+
+    function initDatePicker() {
+        $('#datepicker').datepicker({
+            showOn: 'button',
+            buttonImage: 'images/icons/calendar.png',
+            buttonImageOnly: true,
+            beforeShow: function (input, inst) {
+                setTimeout(function () {
+                    var $calendar = inst.dpDiv;
+                    $calendar.position({
+                        my: 'left top',
+                        at: 'left bottom+5',
+                        of: $('#date-dropdown')
+                    });
+                }, 1);
+            },
+            onSelect: function () {
+                syncDateDropdownWithDatePicker();
+            }
+        });
+    }
+
+
+    /** Date Dropdown **/
+
+    function initDateDropDown() {
+        var currentDate = new Date();
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth();
+        var currentDay = currentDate.getDate();
+        var numberOfDays = daysInMonth(currentYear, currentMonth);
+
+        //populateYearDropdown(currentYear - 100, currentYear);
+        //populateMonthDropdown();
+        //populateDayDropdown(numberOfDays);
+
+        //selectYearDropdown(currentYear);
+        //selectMonthDropdown(currentMonth);
+        //selectDayDropdown(currentDay);
+
+        bindYearDropdownEvent();
+        bindMonthDropdownEvent();
+        bindDayDropdownEvent();
+    }
+
+    function populateYearDropdown(startYear, endYear) {
+        var yearOptions = [];
+
+        for (var y = endYear; y >= startYear; y--) {
+            yearOptions.push('<option value="' + y + '">' + y + '</option>');
+        }
+
+        $('#year').html(yearOptions.join());
+    }
+
+    function populateMonthDropdown() {
+        var monthOptions = [];
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        for (var m = 0; m < months.length; m++) {
+            monthOptions.push('<option value="' + m + '">' + months[m] + '</option>');
+        }
+
+        $('#month').html(monthOptions.join());
+    }
+
+    function populateDayDropdown(numberOfDays) {
+        var dayOptions = [];
+        for (var d = 1; d <= numberOfDays; d++) {
+            dayOptions.push('<option value="' + d + '">' + d + '</option>');
+        }
+        $('#day').html(dayOptions.join());
+    }
+
+    function selectYearDropdown(year) {
+        $('#year option[value=' + year + ']').attr('selected', true);
+    }
+
+    function selectMonthDropdown(month) {
+        $('#month option[value=' + month + ']').attr('selected', true);
+    }
+
+    function selectDayDropdown(day) {
+        $('#day option[value=' + day + ']').attr('selected', true);
+    }
+
+    function refreshDayDropdown() {
+        var year = parseInt($('#year').val());
+        var month = parseInt($('#month').val());
+        var day = parseInt($('#day').val());
+        var numberOfDays = daysInMonth(year, month);
+
+        populateDayDropdown(numberOfDays);
+
+        if (day <= numberOfDays) {
+            selectDayDropdown(day);
+        } else {
+            selectDayDropdown(numberOfDays);
+        }
+    }
+
+    /*** Event handlers ***/
+
+    function bindYearDropdownEvent() {
+        $('#year').on('change', function () {
+            //refreshDayDropdown();
+            syncDatePickerWithDateDropdown();
+        });
+    }
+
+    function bindMonthDropdownEvent() {
+        $('#month').on('change', function () {
+            //refreshDayDropdown();
+            syncDatePickerWithDateDropdown();
+        });
+    }
+
+    function bindDayDropdownEvent() {
+        $('#day').on('change', function () {
+            syncDatePickerWithDateDropdown();
+        });
+    }
+
+
+    /** Sync Functions **/
+
+    function syncDateDropdownWithDatePicker() {
+        var datePickerDate = $('#datepicker').datepicker('getDate');
+        selectYearDropdown(datePickerDate.getFullYear());
+        selectMonthDropdown(datePickerDate.getMonth());
+        refreshDayDropdown();
+        selectDayDropdown(datePickerDate.getDate());
+    }
+
+    function syncDatePickerWithDateDropdown() {
+        var dropdownYear = parseInt($('#year').val());
+        var dropdownMonth = parseInt(($('#month').val()) - 1);
+        var dropdownDay = parseInt($('#day').val());
+
+        if (dropdownYear < 1 || dropdownMonth < 0 || dropdownDay < 1) {
+            var dropdownDate = new Date(1, 1, 1);
+        }
+        else {
+            var dropdownDate = new Date(dropdownYear, dropdownMonth, dropdownDay);
+        }
+        $('#datepicker').datepicker('setDate', dropdownDate);
+    }
+
+
+    /** Utility Function **/
+    // Reference: http://stackoverflow.com/a/315767 + fguillen's comment
+    function daysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
+
+});
+</script>
