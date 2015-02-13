@@ -65,7 +65,6 @@ namespace Agile.ThinkingCap.DatePickerCtrl
             }
             set
             {
-
                 EnsureChildControls();
                 if (value != null)
                 {
@@ -89,23 +88,83 @@ namespace Agile.ThinkingCap.DatePickerCtrl
         [Category("Appearance")]
         [Description("Date format, e.g. 'dd.MM.yyyy' or 'MM/dd/yyyy'.")]
         [Browsable(true)]
+        //LMS date formats: "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy", "yy/MM/dd", "yyyy-MM-dd", "dd-MMM-yyyy", "dd/MM/yyyy"
         public string DateFormat
         {
             get
             {
                 EnsureChildControls();
-                string result = dateFormat.Replace("yy", "yyyy");
-                result = result.Replace("M", "MMM"); 
-                result = result.Replace("mm", "MM");
+                //string result = dateFormat.Replace("yy", "yyyy");
+                //result = result.Replace("M", "MMM"); 
+                //result = result.Replace("mm", "MM");
+                string result = "";
+                switch (dateFormat)
+                {
+                    case "m/d/yy":
+                        result = "M/d/yyyy";
+                        break;
+                    case "m/d/y":
+                        result = "M/d/yy";
+                        break;
+                    case "mm/dd/y":
+                        result = "MM/dd/yy";
+                        break;
+                    case "mm/dd/yy":
+                        result = "MM/dd/yyyy";
+                        break;
+                    case "y/mm/dd":
+                        result = "yy/MM/dd";
+                        break;
+                    case "yy-mm-dd":
+                        result = "yyyy-MM-dd";
+                        break;
+                    case "dd-M-yy":
+                        result = "dd-MMM-yyyy";
+                        break;
+                    case "dd/mm/yy":
+                        result = "dd/MM/yyyy";
+                        break;
+                }
                 return result;
             }
             set
             {
-                EnsureChildControls();
-                string result = value.Replace("yyyy", "yy").Replace("YYYY", "yy");
-                result = result.Replace("MMM", "M");
-                result = result.Replace("MM", "mm");
+                //string result = value.Replace("yyyy", "yy").Replace("YYYY", "yy");
+                //result = result.Replace("MMM", "M");
+                //result = result.Replace("MM", "mm");
+                //dateFormat = result;
+                string result = "";
+                switch(value)
+                {
+                    case "M/d/yyyy":
+                        result = "m/d/yy";
+                        break;
+                    case "M/d/yy":
+                        result = "m/d/y";
+                        break;
+                    case "MM/dd/yy":
+                        result = "mm/dd/y";
+                        break;
+                    case "MM/dd/yyyy":
+                        result = "mm/dd/yy";
+                        break;
+                    case "yy/MM/dd":
+                        result = "y/mm/dd";
+                        break;
+                    case "yyyy-MM-dd":
+                        result = "yy-mm-dd";
+                        break;
+                    case "dd-MMM-yyyy":
+                        result = "dd-M-yy";
+                        break;
+                    case "dd/MM/yyyy":
+                        result = "dd/mm/yy";
+                        break;
+                }
+                if (string.IsNullOrEmpty(result))
+                    result = "dd/mm/yy";
                 dateFormat = result;
+                EnsureChildControls();
             }
         }
 
