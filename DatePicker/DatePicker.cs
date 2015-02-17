@@ -15,7 +15,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
     public class DatePicker : CompositeControl
     {
 
-        TextBox datepicker;
+        private TextBox datepicker;
 
         [Description("Fires when the date has been changed and AutoPostBack is set to 'true'.")]
         public event EventHandler<DateChangedEventArgs> DateChanged;
@@ -84,7 +84,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
             }
         }
 
-        private string dateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower().Replace("yyyy","yy");
+        private string dateFormat;// = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower().Replace("yyyy","yy");
         [Category("Appearance")]
         [Description("Date format, e.g. 'dd.MM.yyyy' or 'MM/dd/yyyy'.")]
         [Browsable(true)]
@@ -129,6 +129,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
             }
             set
             {
+                EnsureChildControls();
                 //string result = value.Replace("yyyy", "yy").Replace("YYYY", "yy");
                 //result = result.Replace("MMM", "M");
                 //result = result.Replace("MM", "mm");
@@ -164,7 +165,6 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                 if (string.IsNullOrEmpty(result))
                     result = "dd/mm/yy";
                 dateFormat = result;
-                EnsureChildControls();
             }
         }
 
@@ -182,6 +182,13 @@ namespace Agile.ThinkingCap.DatePickerCtrl
         {
             base.OnInit(e);
         }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            datepicker.Attributes.Add("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';");
+            datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" });");
+        }
+
         protected override void CreateChildControls()
         {
             Controls.Clear();
@@ -189,8 +196,8 @@ namespace Agile.ThinkingCap.DatePickerCtrl
             datepicker = new TextBox();
             datepicker.Style.Add("background", "url(images/calendar/calendar.gif) no-repeat 100px 0px; padding:2px");
             datepicker.Style.Add("width", "120px");
-            datepicker.Attributes.Add ("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';" );
-            datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" });");
+            //datepicker.Attributes.Add ("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';" );
+            //datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + controlDateFormat + "\" });");
             this.Controls.Add(datepicker);
         }
     }
