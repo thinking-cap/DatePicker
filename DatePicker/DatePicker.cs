@@ -168,6 +168,12 @@ namespace Agile.ThinkingCap.DatePickerCtrl
             }
         }
 
+        public void Clear()
+        {
+            EnsureChildControls();
+            datepicker.Text = "";
+        }
+
         private void ResetDateFormat()
         {
             DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
@@ -185,6 +191,8 @@ namespace Agile.ThinkingCap.DatePickerCtrl
 
         protected override void OnPreRender(EventArgs e)
         {
+            if (string.IsNullOrEmpty(dateFormat))
+                dateFormat = "dd/mm/yy";
             datepicker.Attributes.Add("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';");
             datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" });");
         }
