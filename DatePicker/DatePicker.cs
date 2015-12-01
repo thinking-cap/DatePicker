@@ -195,6 +195,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                 dateFormat = "dd/mm/yy";
             datepicker.Attributes.Add("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';");
             datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" });");
+            datepicker.Attributes.Add("class", "form-control datepicker");
         }
 
         protected override void CreateChildControls()
