@@ -124,6 +124,9 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                     case "dd/mm/yy":
                         result = "dd/MM/yyyy";
                         break;
+                    case "MMM-dd-yyyy":
+                        result = "M-dd-yy";
+                        break;
                 }
                 return result;
             }
@@ -160,6 +163,9 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                         break;
                     case "dd/MM/yyyy":
                         result = "dd/mm/yy";
+                        break;
+                    case "MMM-dd-yyyy":
+                        result = "M-dd-yy";
                         break;
                 }
                 if (string.IsNullOrEmpty(result))
