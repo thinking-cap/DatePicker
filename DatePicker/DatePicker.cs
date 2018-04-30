@@ -88,7 +88,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
         [Category("Appearance")]
         [Description("Date format, e.g. 'dd.MM.yyyy' or 'MM/dd/yyyy'.")]
         [Browsable(true)]
-        //LMS date formats: "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy", "yy/MM/dd", "yyyy-MM-dd", "dd-MMM-yyyy", "dd/MM/yyyy"
+        //LMS date formats: "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy", "yy/MM/dd", "yyyy-MM-dd", "dd-MMM-yyyy", "dd/MM/yyyy", "MMM-dd-yyyy"
         public string DateFormat
         {
             get
@@ -125,6 +125,9 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                         result = "dd/MM/yyyy";
                         break;
                     case "MMM-dd-yyyy":
+                        result = "M-dd-yy";
+                        break;
+                    case "M-dd-yy":
                         result = "M-dd-yy";
                         break;
                 }
@@ -167,9 +170,12 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                     case "MMM-dd-yyyy":
                         result = "M-dd-yy";
                         break;
+                    case "M-dd-yy":
+                        result = "M-dd-yy";
+                        break;
                 }
                 if (string.IsNullOrEmpty(result))
-                    result = "dd/mm/yy";
+                    result = "";//"dd/mm/yy";
                 dateFormat = result;
             }
         }
@@ -198,10 +204,33 @@ namespace Agile.ThinkingCap.DatePickerCtrl
         protected override void OnPreRender(EventArgs e)
         {
             if (string.IsNullOrEmpty(dateFormat))
-                dateFormat = "dd/mm/yy";
+                dateFormat = "mm/dd/yy";
+            else
+                dateFormat = dateFormat.Replace("yyyy", "yy");
+
+            if (dateFormat == "MMM-dd-yy")
+                dateFormat = dateFormat.Replace("MMM", "M");
+            else
+                dateFormat = dateFormat.ToLower();
+
             datepicker.Attributes.Add("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';");
-            datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" });");
-            datepicker.Attributes.Add("class", "form-control datepicker");
+            datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" }).datepicker();");
+            datepicker.Attributes.Add("class", "date");
+
+
+            //var dateFields = $('.date');
+            //var userDateFormat = '<%=Agile.ThinkingCap.Campus.Global.SessionUser.DateFormat%>'
+            //        var dateFormat = (typeof(userDateFormat) !== 'undefined') ? userDateFormat.replace('yyyy', 'yy') : 'mm/dd/yy'
+            //        if (dateFormat == 'MMM-dd-yy')
+            //    dateFormat = dateFormat.replace('MMM', 'M');
+            //else
+            //    dateFormat = dateFormat.toLowerCase();
+            //        $.each(dateFields, function() {
+            //            $(this).datepicker({
+            //        yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true,
+            //                dateFormat: dateFormat
+            //            }).datepicker();
+            //});
         }
 
         protected override void CreateChildControls()
