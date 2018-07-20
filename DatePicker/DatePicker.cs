@@ -18,7 +18,7 @@ namespace Agile.ThinkingCap.DatePickerCtrl
         private TextBox datepicker;
 
         [Description("Fires when the date has been changed and AutoPostBack is set to 'true'.")]
-        public event EventHandler<DateChangedEventArgs> DateChanged;
+        //public event EventHandler<DateChangedEventArgs> DateChanged;
     
         private bool allowType;  // I KEEP It For Compatibility
         public bool AllowType
@@ -97,6 +97,9 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                 //string result = dateFormat.Replace("yy", "yyyy");
                 //result = result.Replace("M", "MMM"); 
                 //result = result.Replace("mm", "MM");
+
+                
+
                 string result = "";
                 switch (dateFormat)
                 {
@@ -118,9 +121,6 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                     case "yy-mm-dd":
                         result = "yyyy-MM-dd";
                         break;
-                    case "dd-M-yy":
-                        result = "dd-MMM-yyyy";
-                        break;
                     case "dd/mm/yy":
                         result = "dd/MM/yyyy";
                         break;
@@ -130,6 +130,16 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                     case "M-dd-yy":
                         result = "M-dd-yy";
                         break;
+                    case "dd-MMM-yyyy":
+                        result = "dd-M-yy";
+                        break;
+                    case "d-m-yyyy":
+                        result = "dd-m-yy";
+                        break;
+                    case "d-mm-yyyy":
+                        result = "dd-mm-yy";
+                        break;
+
                 }
                 return result;
             }
@@ -161,9 +171,6 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                     case "yyyy-MM-dd":
                         result = "yy-mm-dd";
                         break;
-                    case "dd-MMM-yyyy":
-                        result = "dd-M-yy";
-                        break;
                     case "dd/MM/yyyy":
                         result = "dd/mm/yy";
                         break;
@@ -172,6 +179,18 @@ namespace Agile.ThinkingCap.DatePickerCtrl
                         break;
                     case "M-dd-yy":
                         result = "M-dd-yy";
+                        break;
+                    case "dd-M-yyyy":
+                        result = "dd-M-yy";
+                        break;
+                    case "dd-MMM-yyyy":
+                        result = "dd-M-yy";
+                        break;
+                    case "d-m-yyyy":
+                        result = "dd-m-yy";
+                        break;
+                    case "d-mm-yyyy":
+                        result = "dd-mm-yy";
                         break;
                 }
                 if (string.IsNullOrEmpty(result))
@@ -210,8 +229,8 @@ namespace Agile.ThinkingCap.DatePickerCtrl
 
             if (dateFormat == "MMM-dd-yy")
                 dateFormat = dateFormat.Replace("MMM", "M");
-            else
-                dateFormat = dateFormat.ToLower();
+            //else
+            //    dateFormat = dateFormat.ToLower();
 
             datepicker.Attributes.Add("onkeydown", "if (event.keyCode != 8) return false; else this.value = '';");
             datepicker.Attributes.Add("onmousedown", "$(this).datepicker({yearRange: '-100:+15', changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: \"" + dateFormat + "\" }).datepicker();");
